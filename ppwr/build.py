@@ -14,8 +14,9 @@ import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 
+from .branding import BrandingError, write_favicons
 from .glossary import GlossaryError, load_glossary
-from .qr import write_labels, write_qr
+from .qr import write_qr
 from .render import SITE_URL, build_site
 from .translate import TranslationError, translate
 from .workbook import WorkbookError, find_workbook, read_declaration
@@ -63,6 +64,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     templates_dir = args.site / "templates"
+    static_dir = args.site / "static"
     strings = json.loads((templates_dir / "ui-strings.json").read_text(encoding="utf-8"))
 
     build_site(
@@ -70,10 +72,16 @@ def main(argv: list[str] | None = None) -> int:
         strings=strings,
         updated=last_updated(source),
         templates_dir=templates_dir,
-        static_dir=args.site / "static",
+        static_dir=static_dir,
         out_dir=args.out,
     )
-    write_labels(write_qr(SITE_URL, args.out), SITE_URL, templates_dir, args.out)
+    write_qr(SITE_URL, args.out)
+
+    try:
+        write_favicons(static_dir / "logo.png", args.out)
+    except BrandingError as error:
+        print(f"build failed: {error}", file=sys.stderr)
+        return 1
 
     print(f"built {len(german.rows)} articles from {source.name} into {args.out}")
     return 0

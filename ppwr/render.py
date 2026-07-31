@@ -11,6 +11,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from .workbook import Declaration
 
 SITE_URL = "https://ppwr.jt-lizenzen.de/"
+COMPANY_URL = "https://www.jt-lizenzen.de/"
 LANGUAGES = ("de", "en")
 
 _ENGLISH_MONTHS = (
@@ -63,6 +64,7 @@ def build_site(
             t=strings[language],
             updated=format_date(updated, language),
             site_url=SITE_URL,
+            company_url=COMPANY_URL,
         )
         target = out_dir / language
         target.mkdir()

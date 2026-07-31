@@ -9,11 +9,19 @@
 <link rel="alternate" hreflang="de" href="{{ site_url }}de/">
 <link rel="alternate" hreflang="en" href="{{ site_url }}en/">
 <link rel="alternate" hreflang="x-default" href="{{ site_url }}">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="theme-color" content="#e2560d">
 <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 <header class="masthead">
-  <a class="switch" href="../{{ other }}/" hreflang="{{ other }}" title="{{ t.switch_title }}">{{ t.switch_label }}</a>
+  <div class="topbar">
+    <a class="brand" href="{{ company_url }}" title="{{ t.home_title }}">
+      <img src="../logo.png" alt="{{ t.logo_alt }}" width="480" height="213">
+    </a>
+    <a class="switch" href="../{{ other }}/" hreflang="{{ other }}" title="{{ t.switch_title }}">{{ t.switch_label }}</a>
+  </div>
   <h1>{{ declaration.title }}</h1>
   <p class="intro">{{ t.intro }}</p>
   {% if declaration.distributor_lines %}
@@ -22,6 +30,7 @@
     {% for line in declaration.distributor_lines %}
     <p>{{ line }}</p>
     {% endfor %}
+    <p>{{ t.home_intro }} <a href="{{ company_url }}">{{ t.home_label }}</a></p>
   </section>
   {% endif %}
 </header>
@@ -48,6 +57,7 @@
 </main>
 <footer>
   <p>{{ t.updated_label }} {{ updated }}</p>
+  <p><a href="{{ company_url }}">{{ t.home_label }}</a></p>
 </footer>
 </body>
 </html>

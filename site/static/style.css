@@ -1,62 +1,122 @@
+/* Mobile first. The page is reached by scanning a QR code on a package, so
+   the phone layout is the base and the wide table is the enhancement. */
+
 :root {
   --ink: #16191d;
   --muted: #5b6470;
   --rule: #d7dce3;
   --surface: #ffffff;
-  --accent: #0b5c3f;
+  --accent: #e2560d; /* the logo's orange */
+  --accent-dark: #b8430a; /* darkened for text contrast on white */
   --page: #f6f7f9;
+  --gutter: 1rem;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
-  padding: 2rem 1.25rem 4rem;
+  padding: 1.25rem var(--gutter) 3rem;
   background: var(--page);
   color: var(--ink);
   font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-.masthead, main, footer { max-width: 78rem; margin-inline: auto; }
-
-h1 {
-  margin: 0 0 0.75rem;
-  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
-  line-height: 1.2;
+/* Full viewport width; the gutter alone keeps content off the edge. */
+.masthead,
+main,
+footer {
+  width: 100%;
+  margin-inline: auto;
 }
 
-.intro { max-width: 46rem; color: var(--muted); }
+/* Header ---------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.brand {
+  display: inline-block;
+  line-height: 0;
+}
+
+.brand img {
+  width: auto;
+  height: 3rem;
+  max-width: 100%;
+}
 
 .switch {
-  float: right;
-  padding: 0.4rem 0.85rem;
+  padding: 0.45rem 0.95rem;
   border: 1px solid var(--rule);
   border-radius: 999px;
   background: var(--surface);
-  color: var(--accent);
+  color: var(--accent-dark);
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.switch:hover, .switch:focus { border-color: var(--accent); }
+.switch:hover,
+.switch:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.35rem, 1.1rem + 1.4vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.intro {
+  max-width: 62ch;
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+}
 
 .distributor {
-  margin: 1.5rem 0 2rem;
-  padding: 1rem 1.25rem;
+  margin: 0 0 2rem;
+  padding: 1rem 1.15rem;
   border-left: 3px solid var(--accent);
   background: var(--surface);
 }
 
-.distributor h2 { margin: 0 0 0.5rem; font-size: 0.95rem; color: var(--muted); }
-.distributor p { margin: 0; }
+.distributor h2 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.distributor p {
+  margin: 0;
+}
+
+.distributor a,
+footer a {
+  color: var(--accent-dark);
+}
+
+/* Articles as cards (mobile base) --------------------------------------- */
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--surface);
-  font-size: 0.9rem;
 }
 
 caption {
@@ -66,67 +126,179 @@ caption {
   font-weight: 600;
 }
 
-th, td {
-  padding: 0.6rem 0.7rem;
+table,
+caption,
+thead,
+tbody,
+tr,
+td {
+  display: block;
+  width: 100%;
+}
+
+/* The header row is the label source for the cards via td[data-label]. It is
+   hidden visually but kept in the accessibility tree.
+
+   This must come AFTER the rule above: that rule has equal specificity and
+   would otherwise win on source order and stretch the hidden header to full
+   width, whose cells then push the page sideways on a phone. */
+thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+tr {
+  margin-bottom: 1rem;
   border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+td {
+  padding: 0.6rem 0.9rem;
+  border: 0;
+  border-top: 1px solid var(--rule);
   text-align: left;
   vertical-align: top;
 }
 
-thead th {
-  position: sticky;
-  top: 0;
-  background: var(--accent);
-  color: #fff;
-  font-size: 0.8rem;
-  letter-spacing: 0.01em;
+td::before {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  content: attr(data-label);
 }
 
-tbody tr:nth-child(even) { background: #fbfcfd; }
+/* The first cell is the article number: the card's heading. */
+td:first-child {
+  border-top: 0;
+  background: var(--accent);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
 
-td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+td:first-child::before {
+  display: none;
+}
 
-footer { margin-top: 2rem; color: var(--muted); font-size: 0.875rem; }
+/* Footer ----------------------------------------------------------------- */
 
-.chooser { padding-top: 4rem; text-align: center; }
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
 
-@media (max-width: 900px) {
-  table, caption, thead, tbody, tr, td { display: block; width: 100%; }
+.chooser {
+  padding-top: 4rem;
+  text-align: center;
+}
 
-  thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+/* Table layout (wide screens) -------------------------------------------- */
 
-  tr {
-    margin-bottom: 1rem;
-    border: 1px solid var(--rule);
-    background: var(--surface);
+@media (min-width: 60rem) {
+  :root {
+    --gutter: 2rem;
   }
 
-  tbody tr:nth-child(even) { background: var(--surface); }
+  .brand img {
+    height: 4rem;
+  }
 
-  td { border: 0; border-top: 1px solid var(--rule); padding: 0.6rem 0.9rem; }
+  table,
+  caption,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: revert;
+    width: auto;
+  }
+
+  table {
+    display: table;
+    width: 100%;
+    background: var(--surface);
+    font-size: 0.9rem;
+  }
+
+  thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+
+  th,
+  td {
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--rule);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.78rem;
+  }
+
+  tr {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fbfcfd;
+  }
 
   td::before {
-    display: block;
-    color: var(--muted);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    content: attr(data-label);
+    display: none;
   }
 
   td:first-child {
-    border-top: 0;
-    background: var(--accent);
-    color: #fff;
-    font-size: 1rem;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    white-space: nowrap;
   }
-
-  td:first-child::before { display: none; }
 }
 
+/* Print ------------------------------------------------------------------ */
+
 @media print {
-  body { padding: 0; background: #fff; font-size: 10pt; }
-  .switch { display: none; }
-  thead th { position: static; background: #eee; color: #000; }
-  tr { break-inside: avoid; }
+  body {
+    padding: 0;
+    background: #fff;
+    font-size: 10pt;
+  }
+
+  .switch {
+    display: none;
+  }
+
+  thead th {
+    position: static;
+    background: #eee;
+    color: #000;
+  }
+
+  tr {
+    break-inside: avoid;
+  }
 }

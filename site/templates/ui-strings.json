@@ -7,7 +7,11 @@
     "updated_label": "Stand:",
     "switch_label": "English",
     "switch_title": "Show this page in English",
-    "empty_cell": "–"
+    "empty_cell": "–",
+    "logo_alt": "JT-Lizenzen – 1A Fulfillment",
+    "home_label": "www.jt-lizenzen.de",
+    "home_title": "Zur Website von JT-Lizenzen",
+    "home_intro": "Mehr über uns:"
   },
   "en": {
     "page_title": "PPWR declarations of conformity – JT-Lizenzen",
@@ -17,6 +21,10 @@
     "updated_label": "As of",
     "switch_label": "Deutsch",
     "switch_title": "Diese Seite auf Deutsch anzeigen",
-    "empty_cell": "–"
+    "empty_cell": "–",
+    "logo_alt": "JT-Lizenzen – 1A Fulfillment",
+    "home_label": "www.jt-lizenzen.de",
+    "home_title": "Visit the JT-Lizenzen website",
+    "home_intro": "More about us:"
   }
 }
