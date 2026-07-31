@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import openpyxl
+from openpyxl.utils import get_column_letter
 
 HEADER_CELL = "Artikelnummer"
 DISTRIBUTOR_MARKER = "In Verkehrbringer:"
@@ -50,14 +51,34 @@ def find_workbook(data_dir: Path) -> Path:
     return candidates[0]
 
 
-def _text(value: object) -> str:
-    return "" if value is None else str(value).strip()
+def _text(value: object, coordinate: str = "") -> str:
+    """Return ``value`` as stripped text, or raise if it is not text.
+
+    Excel silently reformats a cell's *display*, not its underlying value:
+    an article number typed without its "-01" suffix becomes an int and
+    loses its leading zeros, a percent-formatted cell becomes a bare float.
+    Reproducing Excel's display formatting is unwinnable, so a non-string
+    cell in data read as text is rejected rather than restringified into
+    something that quietly does not match what the sheet shows.
+    """
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        where = f" at {coordinate}" if coordinate else ""
+        raise WorkbookError(
+            f"cell{where} contains a {type(value).__name__} ({value!r}), not text - "
+            "format the column as Text in Excel so the published value is exactly what you see"
+        )
+    return value.strip()
 
 
 def read_declaration(path: Path) -> Declaration:
     """Parse the first worksheet of ``path`` into a :class:`Declaration`."""
     book = openpyxl.load_workbook(path, data_only=True)
-    grid = [[_text(value) for value in row] for row in book.worksheets[0].iter_rows(values_only=True)]
+    grid = [
+        [_text(cell.value, cell.coordinate) for cell in row]
+        for row in book.worksheets[0].iter_rows(values_only=False)
+    ]
 
     header_index = next(
         (index for index, row in enumerate(grid) if row and row[0] == HEADER_CELL),
@@ -68,17 +89,46 @@ def read_declaration(path: Path) -> Declaration:
             f"{path.name}: no header row - expected a cell {HEADER_CELL!r} in column A"
         )
 
+    if _distributor_index(grid, header_index) is None:
+        raise WorkbookError(
+            f"{path.name}: no distributor block - expected a cell {DISTRIBUTOR_MARKER!r} "
+            "in column A above the header row"
+        )
+
+    header_row = grid[header_index]
     columns: list[str] = []
-    for cell in grid[header_index]:
+    gap_index: int | None = None
+    for index, cell in enumerate(header_row):
         if not cell:
+            gap_index = index
             break
         columns.append(cell)
 
+    if gap_index is not None:
+        beyond = [cell for cell in header_row[gap_index + 1:] if cell]
+        if beyond:
+            gap_column = get_column_letter(gap_index + 1)
+            raise WorkbookError(
+                f"{path.name}: header row has a blank cell at column {gap_column} "
+                f"but {beyond!r} follows it - the header row must not have gaps"
+            )
+
     rows: list[tuple[str, ...]] = []
-    for row in grid[header_index + 1:]:
+    blank_row_index: int | None = None
+    for offset, row in enumerate(grid[header_index + 1:]):
         if not row or not row[0]:
+            blank_row_index = header_index + 1 + offset
             break
         rows.append(tuple(row[i] if i < len(row) else "" for i in range(len(columns))))
+
+    if blank_row_index is not None:
+        for index, row in enumerate(grid[blank_row_index + 1:], start=blank_row_index + 1):
+            if row and row[0]:
+                raise WorkbookError(
+                    f"{path.name}: row {index + 1} has an article number but row "
+                    f"{blank_row_index + 1} above it is blank - remove the blank row "
+                    "or fill in the gap"
+                )
 
     return Declaration(
         title=grid[0][0] if grid and grid[0] else "",
