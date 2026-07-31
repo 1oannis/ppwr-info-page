@@ -1,0 +1,23 @@
+[project]
+name = "ppwr"
+version = "1.0.0"
+description = "Static site generator for the JT-Lizenzen PPWR conformity declaration"
+requires-python = ">=3.13"
+dependencies = [
+    "openpyxl>=3.1.5",
+    "Jinja2>=3.1.4",
+    "segno>=1.6.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3"]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["ppwr"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
