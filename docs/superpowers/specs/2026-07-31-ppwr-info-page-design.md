@@ -66,7 +66,7 @@ This decision is recorded as `docs/adr/0001-build-time-static-generation.md`.
 
 ## Repository layout
 
-```
+```text
 data/
   PPWR JT Lizenzen.xlsx       source of truth; found by glob, name irrelevant
   glossary.json               DE→EN vocabulary, hand-maintained
@@ -85,7 +85,7 @@ docs/adr/0001-build-time-static-generation.md
 
 Build output, not committed:
 
-```
+```text
 dist/
   index.html                  language redirect
   de/index.html
@@ -247,7 +247,7 @@ The build exits non-zero, printing file, row, column and offending text, on:
 
 Example:
 
-```
+```text
 ERROR row 24, Fertigung: no translation for "heißsiegelbeschichtet"
       add it to data/glossary.json
 ```
