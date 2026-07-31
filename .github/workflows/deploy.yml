@@ -1,15 +1,13 @@
 name: Deploy
 
+# Deliberately no `paths:` filter. Its only benefit is skipping a 30-second
+# build on docs-only commits; its cost is that a commit outside the filter
+# becomes the tip of a push and the site silently does not rebuild - no run,
+# no error, no signal. For a repository whose entire purpose is the published
+# site, always building is the safer trade.
 on:
   push:
     branches: [main]
-    paths:
-      - "data/**"
-      - "ppwr/**"
-      - "site/**"
-      - "tests/**"
-      - "pyproject.toml"
-      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
