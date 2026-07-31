@@ -72,9 +72,15 @@ class _Translator:
         return localise(text)
 
     def _translate(self, text: str, column: str, row: int) -> str:
-        # A comma-free cell splits into a single segment, so this also covers
-        # the "whole cell" case - without letting a pattern's capture group
-        # greedily swallow a real comma-separated list (`.` matches `,` too).
+        # Patterns are tried on the intact cell first: German decimals use a
+        # comma (e.g. "ca. 12,5 g pro Verpackung"), so splitting on commas
+        # before matching would tear a number apart. Falls through to
+        # comma-separated segments only when the whole cell doesn't match -
+        # each pattern's capture groups are constrained (e.g. `[^,]+`, not
+        # `.+`) so a whole-cell match never swallows a real list.
+        whole = self._match(text, column, row)
+        if whole is not None:
+            return whole
         segments = [segment.strip() for segment in text.split(",")]
         return ", ".join(
             self._segment(segment, column, row) for segment in segments if segment

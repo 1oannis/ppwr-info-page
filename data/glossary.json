@@ -45,7 +45,7 @@
       "en": "approx. {grams} g per packaging unit"
     },
     {
-      "de": "^(?P<grams>[\\d.,]+) g (?P<material>.+)$",
+      "de": "^(?P<grams>[\\d.,]+) g (?P<material>[^,]+)$",
       "en": "{grams} g {material|term}"
     }
   ],

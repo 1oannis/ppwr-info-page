@@ -82,6 +82,28 @@ def test_matches_a_whole_cell_pattern(tmp_path):
     )
 
 
+def test_a_whole_cell_pattern_keeps_a_german_decimal_comma_intact(tmp_path):
+    # Regression: splitting on commas before pattern-matching would tear a
+    # German decimal number apart - "ca. 12,5 g" is one weight, not a list.
+    glossary = make_glossary(
+        tmp_path,
+        columns={"Gewicht (Toleranz: +/- 10%)": "Weight (tolerance: +/- 10%)"},
+        patterns=[{
+            "de": r"^ca\. (?P<grams>[\d.,]+) g pro Verpackung$",
+            "en": "approx. {grams} g per packaging unit",
+        }],
+        terms=BASE_TERMS,
+    )
+    declaration = make_declaration(
+        ("Gewicht (Toleranz: +/- 10%)",),
+        (("ca. 12,5 g pro Verpackung",),),
+    )
+
+    assert translate(declaration, glossary).rows == (
+        ("approx. 12.5 g per packaging unit",),
+    )
+
+
 def test_splits_on_commas_and_looks_up_each_segment(tmp_path):
     glossary = make_glossary(
         tmp_path,
@@ -97,7 +119,7 @@ def test_resolves_a_captured_group_through_terms(tmp_path):
     glossary = make_glossary(
         tmp_path,
         columns={"Zusammensetzung": "Composition"},
-        patterns=[{"de": r"^(?P<grams>[\d.,]+) g (?P<material>.+)$", "en": "{grams} g {material|term}"}],
+        patterns=[{"de": r"^(?P<grams>[\d.,]+) g (?P<material>[^,]+)$", "en": "{grams} g {material|term}"}],
         terms={**BASE_TERMS, "Wellenstoff": "fluting", "Testliner braun": "brown testliner"},
     )
     declaration = make_declaration(
