@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from ppwr.glossary import load_glossary
+from ppwr.glossary import GlossaryError, load_glossary
 from ppwr.translate import TranslationError, translate
 from ppwr.workbook import Declaration
 
@@ -189,7 +189,7 @@ def test_an_unresolvable_group_term_is_reported_not_silently_german(tmp_path):
     glossary = make_glossary(
         tmp_path,
         columns={"Zusammensetzung": "Composition"},
-        patterns=[{"de": r"^(?P<grams>[\d.,]+) g (?P<material>.+)$", "en": "{grams} g {material|term}"}],
+        patterns=[{"de": r"^(?P<grams>[\d.,]+) g (?P<material>[^,]+)$", "en": "{grams} g {material|term}"}],
         terms=BASE_TERMS,
     )
     declaration = make_declaration(("Zusammensetzung",), (("100 g Schrenzpapier",),))
@@ -206,3 +206,15 @@ def test_all_failures_are_collected_before_raising(tmp_path):
         translate(declaration, glossary)
 
     assert [failure.text for failure in caught.value.failures] == ["erstes", "zweites"]
+
+
+def test_a_comma_in_a_terms_translation_is_rejected(tmp_path):
+    # A comma inside a term's replacement is indistinguishable from the
+    # separators the translator emits between comma-split segments, so DE and
+    # EN would end up stating a different number of attributes for one cell.
+    with pytest.raises(GlossaryError, match="comma"):
+        make_glossary(
+            tmp_path,
+            columns={"Fertigung": "Manufacture"},
+            terms={**BASE_TERMS, "Flexodruck 1-farbig": "flexo print, 1 colour"},
+        )

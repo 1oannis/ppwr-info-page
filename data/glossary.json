@@ -17,6 +17,7 @@
     "Sorte"
   ],
   "no_number_localisation_columns": [
+    "Artikelnummer",
     "Sorte"
   ],
   "patterns": [
@@ -59,7 +60,7 @@
     "gebündelt": "bundled",
     "palettiert": "palletised",
     "unverschlossen": "unsealed",
-    "Flexodruck 1-farbig": "flexo print, 1 colour",
+    "Flexodruck 1-farbig": "1-colour flexo print",
     "Kraftliner braun": "brown kraftliner",
     "Testliner braun": "brown testliner",
     "Wellenstoff": "fluting"

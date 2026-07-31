@@ -46,10 +46,19 @@ def load_glossary(path: Path) -> Glossary:
             raise GlossaryError(f"{path.name}: invalid regex {entry['de']!r} - {error}") from error
         patterns.append(Pattern(matcher=matcher, replacement=entry["en"]))
 
+    terms = raw.get("terms", {})
+    for german, english in terms.items():
+        if "," in english:
+            raise GlossaryError(
+                f"{path.name}: term {german!r} translates to {english!r}, which contains "
+                "a comma - that is indistinguishable from the separator between "
+                "comma-split segments, so rephrase without one"
+            )
+
     return Glossary(
         columns=raw.get("columns", {}),
         passthrough_columns=frozenset(raw.get("passthrough_columns", ())),
         no_number_localisation_columns=frozenset(raw.get("no_number_localisation_columns", ())),
         patterns=tuple(patterns),
-        terms=raw.get("terms", {}),
+        terms=terms,
     )
