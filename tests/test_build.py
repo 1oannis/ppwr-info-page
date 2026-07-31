@@ -125,16 +125,37 @@ def test_the_qr_rasters_are_printable(tmp_path):
 
 
 def test_the_favicon_is_the_orange_ball_from_the_logo(tmp_path):
-    out = build_into(tmp_path)
+    with Image.open(build_into(tmp_path) / "favicon.ico") as icon:
+        square = icon.convert("RGBA")
 
-    with Image.open(out / "favicon.ico") as icon:
-        assert icon.width == icon.height
+    assert square.width == square.height
+    width, height = square.size
 
-    with Image.open(out / "apple-touch-icon.png") as touch:
+    red, green, blue, alpha = square.getpixel((width // 2, height // 2))
+    assert alpha == 255, "the middle of the ball must be opaque"
+    assert red > 150 and blue < 120, f"favicon centre is {(red, green, blue)}, not orange"
+
+
+def test_the_favicon_corners_are_transparent(tmp_path):
+    # The ball is masked to a circle, so the square's corners fall outside it.
+    # A white-filled corner means the mask was lost and the icon shows a white
+    # box around the mark on any non-white tab background.
+    with Image.open(build_into(tmp_path) / "favicon.ico") as icon:
+        square = icon.convert("RGBA")
+
+    width, height = square.size
+    corners = ((1, 1), (width - 2, 1), (1, height - 2), (width - 2, height - 2))
+    for corner in corners:
+        assert square.getpixel(corner)[3] == 0, f"corner {corner} is not transparent"
+
+
+def test_the_touch_icon_is_opaque(tmp_path):
+    # iOS composites a transparent home-screen icon onto black, which would
+    # frame the ball in a black square, so this one keeps a white ground.
+    with Image.open(build_into(tmp_path) / "apple-touch-icon.png") as touch:
         assert touch.size == (180, 180)
-        # Centre of the mark is the logo's orange, not whitespace.
-        red, green, blue = touch.convert("RGB").getpixel((90, 90))[:3]
-        assert red > 150 and blue < 120, f"favicon centre is {(red, green, blue)}, not orange"
+        assert touch.mode == "RGB"
+        assert touch.getpixel((2, 2)) == (255, 255, 255)
 
 
 def test_the_qr_svg_scales_instead_of_cropping(tmp_path):
