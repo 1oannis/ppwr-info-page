@@ -111,9 +111,11 @@ def test_the_labels_sheet_inlines_a_scalable_svg(tmp_path):
     assert "viewBox=" in root
 
 
-def test_a_missing_spreadsheet_fails_the_build(tmp_path, capsys):
+def test_a_missing_spreadsheet_fails_without_writing_a_site(tmp_path, capsys):
     empty = tmp_path / "data"
     empty.mkdir()
+    out = tmp_path / "dist"
 
-    assert build.main(["--data", str(empty), "--out", str(tmp_path / "dist")]) == 1
+    assert build.main(["--data", str(empty), "--out", str(out)]) == 1
     assert "no .xlsx file" in capsys.readouterr().err
+    assert not out.exists()
