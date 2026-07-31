@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ t.page_title }}</title>
+<meta name="description" content="{{ t.meta_description }}">
+<link rel="canonical" href="{{ site_url }}{{ lang }}/">
+<link rel="alternate" hreflang="de" href="{{ site_url }}de/">
+<link rel="alternate" hreflang="en" href="{{ site_url }}en/">
+<link rel="alternate" hreflang="x-default" href="{{ site_url }}">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="masthead">
+  <a class="switch" href="../{{ other }}/" hreflang="{{ other }}" title="{{ t.switch_title }}">{{ t.switch_label }}</a>
+  <h1>{{ declaration.title }}</h1>
+  <p class="intro">{{ t.intro }}</p>
+  {% if declaration.distributor_lines %}
+  <section class="distributor">
+    <h2>{{ declaration.distributor_label }}</h2>
+    {% for line in declaration.distributor_lines %}
+    <p>{{ line }}</p>
+    {% endfor %}
+  </section>
+  {% endif %}
+</header>
+<main>
+  <table>
+    <caption>{{ t.table_caption }}</caption>
+    <thead>
+      <tr>
+        {% for column in declaration.columns %}
+        <th scope="col">{{ column }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in declaration.rows %}
+      <tr>
+        {% for cell in row %}
+        <td data-label="{{ declaration.columns[loop.index0] }}">{{ cell if cell else t.empty_cell }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</main>
+<footer>
+  <p>{{ t.updated_label }}: {{ updated }}</p>
+</footer>
+</body>
+</html>

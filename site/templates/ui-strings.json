@@ -1,0 +1,22 @@
+{
+  "de": {
+    "page_title": "PPWR Konformitätserklärungen – JT-Lizenzen",
+    "meta_description": "Verpackungsbezogene Konformitätsinformationen nach Verordnung (EU) 2025/40 (PPWR) für die von JT-Lizenzen in Verkehr gebrachten Verpackungen.",
+    "intro": "Diese Seite enthält die verpackungsbezogenen Konformitätsinformationen nach der EU-Verpackungsverordnung (EU) 2025/40 (PPWR) für die nachstehend aufgeführten Verpackungen. Angegeben sind Aufbau, Materialzusammensetzung, Recyclinganteil und Gewicht je Verpackung.",
+    "table_caption": "Verpackungen und ihre Konformitätsangaben",
+    "updated_label": "Stand",
+    "switch_label": "English",
+    "switch_title": "Show this page in English",
+    "empty_cell": "–"
+  },
+  "en": {
+    "page_title": "PPWR declarations of conformity – JT-Lizenzen",
+    "meta_description": "Packaging conformity information under Regulation (EU) 2025/40 (PPWR) for packaging placed on the market by JT-Lizenzen.",
+    "intro": "This page provides the packaging conformity information required by the EU Packaging and Packaging Waste Regulation (EU) 2025/40 (PPWR) for the packaging listed below. It states the construction, material composition, recycled content and weight of each packaging unit.",
+    "table_caption": "Packaging and its conformity data",
+    "updated_label": "As of",
+    "switch_label": "Deutsch",
+    "switch_title": "Diese Seite auf Deutsch anzeigen",
+    "empty_cell": "–"
+  }
+}
