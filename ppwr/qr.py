@@ -24,7 +24,7 @@ def _svg_markup(code: segno.QRCode) -> str:
         xmldecl=False,
         svgns=True,
         scale=8,
-        border=2,
+        border=4,  # ISO/IEC 18004's recommended quiet zone
         dark="#000000",
         light=None,
         omitsize=True,

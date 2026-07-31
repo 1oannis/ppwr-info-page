@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from ppwr import build
 
 GERMAN_MARKERS = (
