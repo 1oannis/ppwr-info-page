@@ -27,6 +27,7 @@ def _svg_markup(code: segno.QRCode) -> str:
         border=2,
         dark="#000000",
         light=None,
+        omitsize=True,
     )
     return buffer.getvalue().decode("utf-8")
 
