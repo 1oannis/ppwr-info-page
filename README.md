@@ -21,6 +21,18 @@ python3 -m ppwr.build
 python3 -m http.server 8000 --directory dist
 ```
 
+## One-time setup
+
+Configured outside the repository, once, when the site was first deployed:
+
+- Repo → Settings → Pages → Source: GitHub Actions.
+- Repo → Settings → Pages → Custom domain: `ppwr.jt-lizenzen.de`.
+- Repo → Settings → Pages → Enforce HTTPS: tick once the TLS certificate for
+  the custom domain shows as issued. The certificate is approved, but as of
+  this writing this toggle still needs to be switched on.
+- Repo → Settings → General → visibility: public. GitHub Pages only publishes
+  from a private repository on GitHub Pro or higher.
+
 ## QR stickers
 
 `dist/labels.html` is a print-ready A4 sheet of identical stickers, and
