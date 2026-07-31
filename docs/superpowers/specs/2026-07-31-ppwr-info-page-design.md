@@ -288,5 +288,6 @@ Pages source is already set to GitHub Actions.
    Pro or higher. Making it public is the simpler option, since the content is
    intended to be publicly readable.
 
-DNS already resolves `ppwr.jt-lizenzen.de` to `1oannis.github.io`, and HTTPS
-enforcement is already enabled.
+DNS already resolves `ppwr.jt-lizenzen.de` to `1oannis.github.io`, and the TLS
+certificate for the domain is approved, so enforcing HTTPS is a single toggle
+in Settings → Pages - but that toggle has not been switched on yet.

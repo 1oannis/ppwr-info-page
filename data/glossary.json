@@ -1,0 +1,68 @@
+{
+  "columns": {
+    "Artikelnummer": "Article number",
+    "Artikelbeschreibung": "Article description",
+    "Fertigung": "Manufacture",
+    "Innenmaß": "Internal dimensions",
+    "Außenmaß": "External dimensions",
+    "Sorte": "Board grade",
+    "Recyclinganteil": "Recycled content",
+    "Zusammensetzung": "Composition",
+    "Gewicht (Toleranz: +/- 10%)": "Weight (tolerance: +/- 10%)"
+  },
+  "passthrough_columns": [
+    "Artikelnummer",
+    "Innenmaß",
+    "Außenmaß",
+    "Sorte"
+  ],
+  "no_number_localisation_columns": [
+    "Artikelnummer",
+    "Sorte"
+  ],
+  "patterns": [
+    {
+      "de": "^Wellkiste \\(FEFCO (?P<code>\\d+)\\)$",
+      "en": "Corrugated box (FEFCO {code})"
+    },
+    {
+      "de": "^Stanzverpackung \\(FEFCO (?P<code>\\d+)\\)$",
+      "en": "Die-cut packaging (FEFCO {code})"
+    },
+    {
+      "de": "^Wellkiste mit (?P<size>[\\d.,]+) mm Zusatzriller vom Boden$",
+      "en": "Corrugated box with {size} mm additional crease from the base"
+    },
+    {
+      "de": "^Der Recyclinganteil an dieser Verpackung beträgt ca\\. (?P<share>[\\d.,]+)%$",
+      "en": "The recycled content of this packaging is approx. {share}%"
+    },
+    {
+      "de": "^Der Recyclinganteil an dieser Verpackung beträgt (?P<share>[\\d.,]+)%$",
+      "en": "The recycled content of this packaging is {share}%"
+    },
+    {
+      "de": "^ca\\. (?P<grams>[\\d.,]+) g pro Verpackung$",
+      "en": "approx. {grams} g per packaging unit"
+    },
+    {
+      "de": "^(?P<grams>[\\d.,]+) g (?P<material>[^,]+)$",
+      "en": "{grams} g {material|term}"
+    }
+  ],
+  "terms": {
+    "Verpackungen nach PPWR - Konformitätserklärungen": "Packaging under the PPWR — Declarations of conformity",
+    "In Verkehrbringer:": "Placed on the market by:",
+    "Wellkiste": "Corrugated box",
+    "Stanzverpackung": "Die-cut packaging",
+    "ohne Druck": "unprinted",
+    "geleimt": "glued",
+    "gebündelt": "bundled",
+    "palettiert": "palletised",
+    "unverschlossen": "unsealed",
+    "Flexodruck 1-farbig": "1-colour flexo print",
+    "Kraftliner braun": "brown kraftliner",
+    "Testliner braun": "brown testliner",
+    "Wellenstoff": "fluting"
+  }
+}
